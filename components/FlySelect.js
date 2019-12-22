@@ -17,12 +17,10 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import Router from './Router';
-
-const App = () => {
+const FlySelect = () => {
   return (
     <>
-      <Router />
+      <Text>HELLO WORLD</Text>
     </>
   );
 };
@@ -66,4 +64,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default FlySelect;
