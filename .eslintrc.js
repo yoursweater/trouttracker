@@ -8,6 +8,7 @@ module.exports = {
     'quotes': ['error', 'single'],
     'no-unused-vars': 0
   },
+  parser: 'babel-eslint',
   plugins: ['react'],
   'parserOptions': {
     'ecmaVersion': 7,
