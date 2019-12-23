@@ -1,11 +1,24 @@
 import json
+import boto3
+import uuid
 
 # pylint: disable=unused-argument
-def hello(event, context):
+def addfish(event, context):
     body = {
         "message": "Go Serverless v1.0! Your function executed successfully!",
         "input": event
     }
+    # mytrout = json.loads(event)
+    dynamodb = boto3.client('dynamodb')
+    # dynamodb.put_item(TableName='fishTable', Item=event)
+    dynamodb.put_item(TableName='fishTable', Item={
+                                                   'id':{'S':str(uuid.uuid4())},
+                                                   'trout':{'S':event['trout']},
+                                                   'fly':{'S':event['fly']},
+                                                   'date':{'S':event['date']},
+                                                   'weather':{'S':event['weather']}
+                                                   })
+
 
     response = {
         "statusCode": 200,
