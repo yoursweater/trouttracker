@@ -2,6 +2,7 @@ import React from 'react'
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import GetLocation from 'react-native-get-location'
 import FlySelect from './FlySelect'
+import { API_KEY } from './utils/WeatherKeyAPI'
 
 
 class Home extends React.Component {
@@ -42,13 +43,27 @@ class Home extends React.Component {
     })
     .then(location => {
         console.log(location);
+        this.setState({ location }, () => this.getWeather(location.latitude, location.longitude))
     })
     .catch(error => {
         const { code, message } = error;
         console.warn(code, message);
     })
-
-	};
+  };
+  
+  getWeather = (lat = 25, lon = 25) => {
+    // console.log(location)
+    fetch(
+			`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&APPID=${API_KEY}&units=metric`
+		)
+			.then(res => res.json())
+			.then(weather => {
+        console.log(weather)
+				this.setState({
+					weather: weather,
+				});
+			})
+  }
 
   render() {
     return (
