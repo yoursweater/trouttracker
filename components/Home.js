@@ -52,16 +52,11 @@ class Home extends React.Component {
   };
   
   getWeather = (lat = 25, lon = 25) => {
-    // console.log(location)
-    fetch(
-			`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&APPID=${API_KEY}&units=metric`
-		)
+    fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&APPID=${API_KEY}&units=metric`)
 			.then(res => res.json())
 			.then(weather => {
         console.log(weather)
-				this.setState({
-					weather: weather,
-				});
+				this.setState({ weather });
 			})
   }
 
