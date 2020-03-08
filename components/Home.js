@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import GetLocation from 'react-native-get-location'
 import FlySelect from './FlySelect'
 
 
@@ -8,8 +9,14 @@ class Home extends React.Component {
   state = {
     trout: null,
     fly: null,
+    size: null,
+    location: null,
     date: null,
     weather: null,
+  }
+
+  componentDidMount() {
+    this.findCoordinates()
   }
 
   renderCards = () => {
@@ -27,6 +34,21 @@ class Home extends React.Component {
   selectFly = (fly) => {
     this.setState({ fly })
   }
+
+  findCoordinates = () => {
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000,
+    })
+    .then(location => {
+        console.log(location);
+    })
+    .catch(error => {
+        const { code, message } = error;
+        console.warn(code, message);
+    })
+
+	};
 
   render() {
     return (
