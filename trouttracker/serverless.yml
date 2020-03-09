@@ -1,7 +1,7 @@
 
 service: trouttracker
 app: trouttracker
-org: daneversen
+org: yoursweater
 
 provider:
   name: aws
@@ -18,6 +18,16 @@ provider:
         - "dynamodb:UpdateItem"
         - "dynamodb:DeleteItem"
       Resource: "arn:aws:dynamodb:us-east-1:589745751216:table/fishTable"
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:DescribeTable"
+        - "dynamodb:Query"
+        - "dynamodb:Scan"
+        - "dynamodb:GetItem"
+        - "dynamodb:PutItem"
+        - "dynamodb:UpdateItem"
+        - "dynamodb:DeleteItem"
+      Resource: "arn:aws:dynamodb:us-east-1:589745751216:table/flyTable"
 
 resources:
   Resources:
@@ -34,7 +44,22 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+    flyTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: flyTable
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
 
 functions:
   addfish:
     handler: handler.addfish
+  addfly:
+    handler: handler.addfly
