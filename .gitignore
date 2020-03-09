@@ -60,3 +60,9 @@ buck-out/
 
 #api key
 /components/utils/WeatherKeyAPI.js
+
+#virtualenv
+/trouttracker/troutvenv
+
+#cached python stuff
+__pycache__/

@@ -47,3 +47,33 @@ def addfly(event, context):
     }
 
     return response
+
+def getflies(event, context):
+    dynamodb = boto3.client('dynamodb')
+
+    response = dynamodb.scan(
+        TableName='flyTable'
+    )
+    items = response['Items']
+
+    response = {
+        "statusCode": 200,
+        "body": json.dumps(items)
+    }
+
+    return response
+
+def getfish(event, context):
+    dynamodb = boto3.client('dynamodb')
+
+    response = dynamodb.scan(
+        TableName='fishTable'
+    )
+    items = response['Items']
+
+    response = {
+        "statusCode": 200,
+        "body": json.dumps(items)
+    }
+
+    return response
