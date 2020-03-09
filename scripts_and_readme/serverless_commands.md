@@ -2,6 +2,8 @@
 
 ### IN THE /trouttracker DIRECTORY (CONTAINING SERVERLESS.YML)
 
+***WARNING: make sure to export user and region first***
+
 # to log in to account
   - serverless login
 
