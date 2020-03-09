@@ -38,12 +38,25 @@ class FlySelect extends React.Component {
   }
 
   submit = () => {
-    let newflies = [...this.state.flies]
-    newflies.push(this.state.addfly)
-    this.setState({
-      addfly: '',
-      flies: newflies
+    console.log('POSTING')
+    let fly = {flyname: this.state.addfly}
+    console.log(fly)
+    fetch('https://xvjn5cyjk4.execute-api.us-east-1.amazonaws.com/dev/addfly', {
+      method: 'post',
+      body: JSON.stringify(fly)
     })
+    .then(res => {
+      console.log(res)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+    // let newflies = [...this.state.flies]
+    // newflies.push(this.state.addfly)
+    // this.setState({
+    //   addfly: '',
+    //   flies: newflies
+    // })
   }
 
   render() {

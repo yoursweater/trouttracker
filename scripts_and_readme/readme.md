@@ -1,6 +1,5 @@
 
 # To-dos
-  - add two more handlers for getFish and getFlies
   - Construct general data and update flow, which proceeds as follows:
     * User loads app
     * User selects fish type, which triggers display of fly type and updates state
@@ -9,3 +8,6 @@
     * Same process occurs for hook size
     * On the submit screen, when a user hits submit the app queries for location, followed by the weather.
       Once the app knows the fish, fly, hooksize, location, and weather, it submits to DB. State is reset to empty values.
+
+# current status
+  - app can retrieve from both tables, now just needs to post flies and fish and finish front end

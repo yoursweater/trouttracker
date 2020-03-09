@@ -9,15 +9,15 @@ def addfish(event, context):
         "message": "Go Serverless v1.0! Your function executed successfully!",
         "input": event
     }
-    # mytrout = json.loads(event)
+    data = json.loads(event['body'])
     dynamodb = boto3.client('dynamodb')
-    # dynamodb.put_item(TableName='fishTable', Item=event)
     dynamodb.put_item(TableName='fishTable', Item={
                                                    'id':{'S':str(uuid.uuid4())},
-                                                   'trout':{'S':event['trout']},
-                                                   'fly':{'S':event['fly']},
-                                                   'date':{'S':event['date']},
-                                                   'weather':{'S':event['weather']}
+                                                   'trout':{'S':data['trout']},
+                                                   'fly':{'S':data['fly']},
+                                                   'date':{'S':data['date']},
+                                                   'weather':{'S':data['weather']},
+                                                   'location':{'S':data['location']}
                                                    })
 
 
@@ -34,10 +34,11 @@ def addfly(event, context):
         "message": "Go Serverless v1.0! Your function executed successfully!",
         "input": event
     }
+    data = json.loads(event['body'])
     dynamodb = boto3.client('dynamodb')
     dynamodb.put_item(TableName='flyTable', Item={
                                                    'id':{'S':str(uuid.uuid4())},
-                                                   'flyname':{'S':event['flyname']},
+                                                   'flyname':{'S':data['flyname']},
                                                    })
 
 
