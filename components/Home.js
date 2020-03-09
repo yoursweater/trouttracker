@@ -14,10 +14,29 @@ class Home extends React.Component {
     location: null,
     date: null,
     weather: null,
+    caughtFish: []
   }
 
   componentDidMount() {
     this.findCoordinates()
+    this.loadFish()
+  }
+
+  loadFish = () => {
+    fetch('https://xvjn5cyjk4.execute-api.us-east-1.amazonaws.com/dev/getfish')
+      .then(res => res.json())
+      .then(fish => {
+        // NEED TO POST A REAL FISH UP WITH LOCATION AND TIME DATA
+        console.log(fish)
+        // let caughtFish = fish.map(fish => {
+        //   let tmp = {
+        //     type: fish.trout.S,
+        //     location: fish.location.S
+        //   }
+        //   return tmp
+        // })
+        // this.setState({caughtFish})
+      })
   }
 
   renderCards = () => {

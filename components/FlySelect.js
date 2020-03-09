@@ -10,6 +10,17 @@ class FlySelect extends React.Component {
     addfly: ''
   }
 
+  componentDidMount() {
+    fetch('https://xvjn5cyjk4.execute-api.us-east-1.amazonaws.com/dev/getflies')
+      .then(res => res.json())
+      .then(flies => {
+        let newflies = flies.map(fly => {
+          return fly.flyname.S
+        })
+        this.setState({flies: newflies})
+      })
+  }
+
   renderCards = () => {
     let cards = this.state.flies.map((fly, idx) => {
       return (

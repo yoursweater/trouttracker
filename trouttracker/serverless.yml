@@ -61,9 +61,25 @@ resources:
 functions:
   addfish:
     handler: handler.addfish
+    events:
+      - http:
+          path: /addfish
+          method: post
   addfly:
     handler: handler.addfly
+    events:
+      - http:
+          path: /addfly
+          method: post
   getflies:
     handler: handler.getflies
+    events:
+      - http:
+          path: /getflies
+          method: get
   getfish:
     handler: handler.getfish
+    events:
+      - http:
+          path: /getfish
+          method: get
