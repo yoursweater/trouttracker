@@ -1,6 +1,7 @@
 
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, ScrollView, TextInput, Alert } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler'
 
 
 class FlySelect extends React.Component {
@@ -11,14 +12,21 @@ class FlySelect extends React.Component {
   }
 
   componentDidMount() {
+    this.updateFlies()
+  }
+
+  updateFlies = () => {
     fetch('https://xvjn5cyjk4.execute-api.us-east-1.amazonaws.com/dev/getflies')
-      .then(res => res.json())
-      .then(flies => {
-        let newflies = flies.map(fly => {
-          return fly.flyname.S
-        })
-        this.setState({flies: newflies})
+    .then(res => res.json())
+    .then(flies => {
+      let newflies = flies.map(fly => {
+        return fly.flyname.S
       })
+      this.setState({
+        addfly: '',
+        flies: newflies
+      })
+    })
   }
 
   renderCards = () => {
@@ -47,16 +55,11 @@ class FlySelect extends React.Component {
     })
     .then(res => {
       console.log(res)
+      this.updateFlies()
     })
     .catch(err => {
       console.log(err)
     })
-    // let newflies = [...this.state.flies]
-    // newflies.push(this.state.addfly)
-    // this.setState({
-    //   addfly: '',
-    //   flies: newflies
-    // })
   }
 
   render() {
@@ -71,7 +74,11 @@ class FlySelect extends React.Component {
           onSubmitEditing={this.submit}
         />
         <Text style={{ paddingBottom: 10, marginTop: 20 }}>Select a fly:</Text>
-        {this.renderCards()}
+        <ScrollView style={styles.innerContainer}>
+          <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
+            {this.renderCards()}
+          </View>
+        </ScrollView>
       </>
     );
   }
@@ -80,17 +87,20 @@ class FlySelect extends React.Component {
 const styles = StyleSheet.create({
   screenContainer: {
     display: 'flex',
+    alignItems: 'center',
     flex: 1,
     width: '100%',
+    height: '100%',
+    justifyContent: 'flex-start',
   },
   innerContainer: {
-    padding: 40,
+    paddingBottom: 40,
+    paddingTop: 0,
     width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center'
   },
   header: {
-    fontSize: 40
+    fontSize: 40,
+    marginTop: 40
   },
   cards: {
     width: '90%',

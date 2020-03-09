@@ -2,7 +2,9 @@ import React from 'react'
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import GetLocation from 'react-native-get-location'
 import FlySelect from './FlySelect'
+import HookSelect from './HookSelect'
 import { API_KEY } from './utils/WeatherKeyAPI'
+import { ScrollView } from 'react-native-gesture-handler'
 
 
 class Home extends React.Component {
@@ -10,7 +12,7 @@ class Home extends React.Component {
   state = {
     trout: null,
     fly: null,
-    size: null,
+    hooksize: null,
     location: null,
     date: null,
     weather: null,
@@ -18,8 +20,8 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-    this.findCoordinates()
-    this.loadFish()
+    // this.findCoordinates()
+    // this.loadFish()
   }
 
   loadFish = () => {
@@ -40,7 +42,7 @@ class Home extends React.Component {
   }
 
   renderCards = () => {
-    const troutTypes = ['Rainbow', 'Brook', 'Brown', 'Golden', 'Cutthroat', 'Lake']
+    const troutTypes = ['Rainbow', 'Brook', 'Brown', 'Golden', 'Cutthroat', 'Lake',]
     let cards = troutTypes.map((trout, idx) => {
       return (
         <TouchableOpacity onPress={() => this.setState({ trout })} key={idx} style={styles.cards}>
@@ -55,47 +57,80 @@ class Home extends React.Component {
     this.setState({ fly })
   }
 
+  selectHook = (hooksize) => {
+    this.setState({ hooksize: hooksize.hook }, () => this.submitFish())
+  }
+
+  submitFish = async () => {
+    await this.findCoordinates()
+    console.log(this.state)
+
+  }
+
   findCoordinates = () => {
-    GetLocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      timeout: 15000,
+    let result = new Promise((res, rej) => {
+      GetLocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 15000,
+      })
+      .then(location => {
+          console.log(location);
+          this.setState({ location }, async () => {
+            await this.getWeather(location.latitude, location.longitude)
+            res()
+          })
+      })
+      .catch(error => {
+          const { code, message } = error;
+          console.warn(code, message);
+          rej()
+      })
     })
-    .then(location => {
-        console.log(location);
-        this.setState({ location }, () => this.getWeather(location.latitude, location.longitude))
-    })
-    .catch(error => {
-        const { code, message } = error;
-        console.warn(code, message);
-    })
+    return result
   };
   
   getWeather = (lat = 25, lon = 25) => {
-    fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&APPID=${API_KEY}&units=metric`)
-			.then(res => res.json())
-			.then(weather => {
-        console.log(weather)
-				this.setState({ weather });
-			})
+    let result = new Promise((res, rej) => {
+      fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&APPID=${API_KEY}&units=metric`)
+        .then(res => res.json())
+        .then(weather => {
+          console.log(weather)
+          this.setState({ 
+            weather,
+            date: new Date()
+          }, () => res());
+        })
+        .catch(err => {
+          console.log(err)
+          rej()
+        })
+    })
+    return result
   }
 
   render() {
     return (
       <View style={styles.screenContainer}>
-        <View style={styles.innerContainer}>
-          {/* start header */}
+        {/* header */}
+        <View >
           <Text style={styles.header}>TroutTracker</Text>
           <View style={{ width: '90%', height: 2, backgroundColor: 'grey', marginTop: 10, marginBottom: 10 }}></View>
-          {/* end header */}
+        </View>
+        {/* body */}
+        <ScrollView style={styles.innerContainer}>
 
-          {/* select a trout type */}
-          {this.state.trout === null && this.renderCards()}
+          {/* 1. select a trout type */}
+          <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
+            {this.state.trout === null && this.renderCards()}
+          </View>
 
-          {/* select a fly */}
+          {/* 2. select a fly */}
           {(this.state.trout && (this.state.fly === null)) && <FlySelect selectFly={this.selectFly} />}
 
+          {/* 3. select a hook size */}
+          {(this.state.trout && this.state.fly && this.state.hooksize === null) && <HookSelect selectHook={this.selectHook} />}
 
-        </View>
+        </ScrollView>
       </View>
     );
   }
@@ -104,17 +139,20 @@ class Home extends React.Component {
 const styles = StyleSheet.create({
   screenContainer: {
     display: 'flex',
+    alignItems: 'center',
     flex: 1,
     width: '100%',
+    height: '100%',
+    justifyContent: 'flex-start',
   },
   innerContainer: {
     padding: 40,
+    paddingTop: 0,
     width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center'
   },
   header: {
-    fontSize: 40
+    fontSize: 40,
+    marginTop: 40
   },
   cards: {
     width: '90%',
