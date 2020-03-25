@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Alert   } from 'react-native'
 import GetLocation from 'react-native-get-location'
 import FlySelect from './FlySelect'
 import HookSelect from './HookSelect'
@@ -65,7 +65,7 @@ class Home extends React.Component {
     try {
       await this.findCoordinates()
     } catch (err) {
-      alert('Had trouble getting weather/geolocation coordinates!')
+      Alert.alert('Had trouble getting weather/geolocation coordinates!')
     }
     console.log(this.state)
     let fish = {
@@ -94,7 +94,7 @@ class Home extends React.Component {
     })
     .catch(err => {
       console.log(err)
-      alert('Had trouble posting new fish to the database!')
+      Alert.alert('Had trouble posting new fish to the database!')
       this.setState({
         trout: null,
         fly: null,
