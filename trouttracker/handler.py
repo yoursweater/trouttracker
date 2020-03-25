@@ -10,6 +10,8 @@ def addfish(event, context):
         "input": event
     }
     data = json.loads(event['body'])
+    print('muh data')
+    print(data)
     dynamodb = boto3.client('dynamodb')
     dynamodb.put_item(TableName='fishTable', Item={
                                                    'id':{'S':str(uuid.uuid4())},
@@ -17,7 +19,8 @@ def addfish(event, context):
                                                    'fly':{'S':data['fly']},
                                                    'date':{'S':data['date']},
                                                    'weather':{'S':data['weather']},
-                                                   'location':{'S':data['location']}
+                                                   'location':{'S':data['location']},
+                                                   'hooksize':{'S':data['hooksize']}
                                                    })
 
 

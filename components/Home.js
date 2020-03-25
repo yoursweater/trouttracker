@@ -62,8 +62,48 @@ class Home extends React.Component {
   }
 
   submitFish = async () => {
-    await this.findCoordinates()
+    try {
+      await this.findCoordinates()
+    } catch (err) {
+      alert('Had trouble getting weather/geolocation coordinates!')
+    }
     console.log(this.state)
+    let fish = {
+      trout: this.state.trout,
+      fly: this.state.fly,
+      date: (this.state.date).toISOString(),
+      weather: JSON.stringify(this.state.weather),
+      location: JSON.stringify(this.state.location),
+      hooksize: this.state.hooksize
+    }
+    fetch('https://xvjn5cyjk4.execute-api.us-east-1.amazonaws.com/dev/addfish', {
+      method: 'post',
+      body: JSON.stringify(fish)
+    })
+    .then(res => {
+      console.log(res)
+      // this.updateFlies()
+      this.setState({
+        trout: null,
+        fly: null,
+        hooksize: null,
+        location: null,
+        date: null,
+        weather: null,
+      })
+    })
+    .catch(err => {
+      console.log(err)
+      alert('Had trouble posting new fish to the database!')
+      this.setState({
+        trout: null,
+        fly: null,
+        hooksize: null,
+        location: null,
+        date: null,
+        weather: null,
+      })
+    })
 
   }
 

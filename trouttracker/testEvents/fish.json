@@ -4,6 +4,7 @@
     "fly": "parachute adams",
     "date": "12/22/2019",
     "weather":"sunny 42 degrees",
-    "location": "Ken Lockwood Gorge"
+    "location": "Ken Lockwood Gorge",
+    "hooksize": "16"
   }
 }
