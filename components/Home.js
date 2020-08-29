@@ -176,9 +176,9 @@ class Home extends React.Component {
     return (
       <View style={styles.screenContainer}>
         {/* header */}
-        <View >
+        <View style={styles.headerTop} >
           <Text style={styles.header}>TroutTracker</Text>
-          <View style={{ width: '90%', height: 2, backgroundColor: 'grey', marginTop: 10, marginBottom: 10 }}></View>
+          {/* <View style={{ width: '100%', height: 2, backgroundColor: 'grey', marginTop: 10, marginBottom: 10, borderBottomWidth: 2, borderBottomColor: 'grey' }}></View> */}
         </View>
         {/* body */}
         <ScrollView style={styles.innerContainer}>
@@ -217,7 +217,15 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 40,
-    marginTop: 40
+    marginTop: 40,
+    textAlign: 'center'
+  },
+  headerTop: {
+    borderWidth: 1,
+    borderColor: 'grey',
+    width: '100%',
+    textAlign: 'center',
+    justifyContent: 'center'
   },
   cards: {
     width: '90%',
