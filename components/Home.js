@@ -5,6 +5,7 @@ import FlySelect from './FlySelect'
 import HookSelect from './HookSelect'
 import { API_KEY } from './utils/WeatherKeyAPI'
 import { ScrollView } from 'react-native-gesture-handler'
+import Geolocation from '@react-native-community/geolocation';
 
 
 class Home extends React.Component {
@@ -20,8 +21,11 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
+
+    // Geolocation.getCurrentPosition(info => console.log(info));
+
     // this.findCoordinates()
-    // this.loadFish()
+    this.loadFish()
   }
 
   loadFish = () => {
