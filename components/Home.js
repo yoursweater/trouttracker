@@ -5,6 +5,7 @@ import FlySelect from './FlySelect'
 import HookSelect from './HookSelect'
 import { API_KEY } from './utils/WeatherKeyAPI'
 import { ScrollView } from 'react-native-gesture-handler'
+import uuid4 from 'uuid4'
 import Geolocation from '@react-native-community/geolocation';
 
 
@@ -17,7 +18,8 @@ class Home extends React.Component {
     location: null,
     date: null,
     weather: null,
-    caughtFish: []
+    caughtFish: [],
+    startWizard: true
   }
 
   componentDidMount() {
@@ -33,15 +35,21 @@ class Home extends React.Component {
       .then(res => res.json())
       .then(fish => {
         // NEED TO POST A REAL FISH UP WITH LOCATION AND TIME DATA
-        console.log(fish)
-        // let caughtFish = fish.map(fish => {
-        //   let tmp = {
-        //     type: fish.trout.S,
-        //     location: fish.location.S
-        //   }
-        //   return tmp
-        // })
-        // this.setState({caughtFish})
+        // console.log(fish)
+        let caughtFish = fish.map(fish => {
+        let locParse = JSON.parse(fish.location.S)
+        
+          let tmp = {
+            type: fish.trout.S,
+            longitude: locParse["longitude"],
+            latitude: locParse["latitude"]
+          }
+          return tmp
+        })
+        console.log('========= CAUGHT FISH =================')
+        // console.log(caughtFish)
+
+        this.setState({caughtFish}, () => console.log(this.state.caughtFish))
       })
   }
 
@@ -49,7 +57,7 @@ class Home extends React.Component {
     const troutTypes = ['Rainbow', 'Brook', 'Brown', 'Golden', 'Cutthroat', 'Lake',]
     let cards = troutTypes.map((trout, idx) => {
       return (
-        <TouchableOpacity onPress={() => this.setState({ trout })} key={idx} style={styles.cards}>
+        <TouchableOpacity onPress={() => this.setState({ trout })} key={uuid4()} style={styles.cards}>
           <Text style={{ fontSize: 30 }}>{trout} Trout</Text>
         </TouchableOpacity>
       )
@@ -152,6 +160,18 @@ class Home extends React.Component {
     return result
   }
 
+  renderCaughtFish = () => {
+    let caughtFish = this.state.caughtFish.map((fish, idx) => {
+      return(
+      <View key={uuid4()}>
+        <Text>{fish['type']}</Text>
+      </View>
+      )
+    })
+    
+    return caughtFish
+  }
+
   render() {
     return (
       <View style={styles.screenContainer}>
@@ -165,7 +185,8 @@ class Home extends React.Component {
 
           {/* 1. select a trout type */}
           <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
-            {this.state.trout === null && this.renderCards()}
+            {(this.state.trout === null && this.state.startWizard === true) && this.renderCards()}
+            {(this.state.trout === null && this.state.startWizard === false) && this.renderCaughtFish()}
           </View>
 
           {/* 2. select a fly */}
