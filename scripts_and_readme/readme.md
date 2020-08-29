@@ -1,13 +1,6 @@
 
 # To-dos
-  - Construct general data and update flow, which proceeds as follows:
-    * User loads app
-    * User selects fish type, which triggers display of fly type and updates state
-    * App queries flies from flyTable to populate. User may add a fly. User then selects a fly.
-      which will update the state, such that it now contains fish + fly.
-    * Same process occurs for hook size
-    * On the submit screen, when a user hits submit the app queries for location, followed by the weather.
-      Once the app knows the fish, fly, hooksize, location, and weather, it submits to DB. State is reset to empty values.
-
-# current status
-  - app can retrieve from both tables, now just needs to post flies and fish and finish front end
+  - Make app look prettier
+  - Add reporting to the "View Caught Fish" component
+  - (Optional) Make app work with limited connectivity
+  - (Optional) Add in map locations for caught fish
