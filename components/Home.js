@@ -7,6 +7,8 @@ import { API_KEY } from './utils/WeatherKeyAPI'
 import { ScrollView } from 'react-native-gesture-handler'
 import uuid4 from 'uuid4'
 import Geolocation from '@react-native-community/geolocation';
+import { Button } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 class Home extends React.Component {
@@ -178,6 +180,20 @@ class Home extends React.Component {
         {/* header */}
         <View style={styles.headerTop} >
           <Text style={styles.header}>TroutTracker</Text>
+          {this.state.trout === null && (
+          <View style={{width: '100%', justifyContent: 'center', alignItems: 'center', marginBottom: 10}}>
+            <Button
+              onPress={() => {
+                this.setState({
+                  startWizard: !this.state.startWizard
+                })
+              }}
+              title={this.state.startWizard === true ? 'View Caught Fish' : 'Add a New Fish'}
+              containerStyle={{width: '80%'}}
+              raised={true}
+            />
+          </View>
+          )}
           {/* <View style={{ width: '100%', height: 2, backgroundColor: 'grey', marginTop: 10, marginBottom: 10, borderBottomWidth: 2, borderBottomColor: 'grey' }}></View> */}
         </View>
         {/* body */}
