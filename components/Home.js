@@ -195,6 +195,7 @@ class Home extends React.Component {
         {/* header */}
         <View style={styles.headerTop} >
           <Text style={styles.header}>TroutTracker</Text>
+          {/* toggle add/view fish */}
           {this.state.trout === null && (
           <View style={{width: '100%', justifyContent: 'center', alignItems: 'center', marginBottom: 10}}>
             <Button
@@ -209,7 +210,29 @@ class Home extends React.Component {
             />
           </View>
           )}
-          {/* <View style={{ width: '100%', height: 2, backgroundColor: 'grey', marginTop: 10, marginBottom: 10, borderBottomWidth: 2, borderBottomColor: 'grey' }}></View> */}
+          {/* cancel button */}
+          {this.state.trout && (
+          <View style={{width: '100%', justifyContent: 'center', alignItems: 'center', marginBottom: 10}}>
+            <Button
+              onPress={() => {
+                this.setState({
+                  trout: null,
+                  fly: null,
+                  hooksize: null,
+                  location: null,
+                  date: null,
+                  weather: null,
+                })
+              }}
+              title='Cancel'
+              type='outline'
+              containerStyle={{width: '60%'}}
+              buttonStyle={{borderColor: 'red'}}
+              titleStyle={{color: 'red'}}
+              raised={true}
+            />
+          </View>
+          )}
         </View>
         {/* body */}
         <ScrollView style={styles.innerContainer}>
