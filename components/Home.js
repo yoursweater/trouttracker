@@ -25,34 +25,36 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-
-    // Geolocation.getCurrentPosition(info => console.log(info));
-
-    // this.findCoordinates()
     this.loadFish()
   }
 
   loadFish = () => {
-    fetch('https://xvjn5cyjk4.execute-api.us-east-1.amazonaws.com/dev/getfish')
-      .then(res => res.json())
-      .then(fish => {
-        // NEED TO POST A REAL FISH UP WITH LOCATION AND TIME DATA
-        // console.log(fish)
-        let caughtFish = fish.map(fish => {
-        let locParse = JSON.parse(fish.location.S)
-        
-          let tmp = {
-            type: fish.trout.S,
-            longitude: locParse["longitude"],
-            latitude: locParse["latitude"]
-          }
-          return tmp
+    try {
+      fetch('https://xvjn5cyjk4.execute-api.us-east-1.amazonaws.com/dev/getfish')
+        .then(res => res.json())
+        .then(fish => {
+          // NEED TO POST A REAL FISH UP WITH LOCATION AND TIME DATA
+          // console.log(fish)
+          let caughtFish = fish.map(fish => {
+          let locParse = JSON.parse(fish.location.S)
+          let weatherParse = JSON.parse(fish.weather.S)
+          // console.log(weatherParse)
+            let tmp = {
+              type: fish.trout.S,
+              longitude: locParse["longitude"],
+              latitude: locParse["latitude"],
+              weather: weatherParse['weather'][0]['description'],
+              temp: (parseFloat(weatherParse['main']['temp']) * 9/5) + 32
+            }
+            return tmp
+          })
+          console.log('========= CAUGHT FISH =================')
+          this.setState({caughtFish}, () => console.log(this.state.caughtFish))
         })
-        console.log('========= CAUGHT FISH =================')
-        // console.log(caughtFish)
-
-        this.setState({caughtFish}, () => console.log(this.state.caughtFish))
-      })
+    } catch(err) {
+      console.log(err)
+      Alert.alert('Could not load caught fish from db!')
+    }
   }
 
   renderCards = () => {
@@ -80,8 +82,9 @@ class Home extends React.Component {
       await this.findCoordinates()
     } catch (err) {
       Alert.alert('Had trouble getting weather/geolocation coordinates!')
+      return
     }
-    console.log(this.state)
+
     let fish = {
       trout: this.state.trout,
       fly: this.state.fly,
@@ -90,6 +93,17 @@ class Home extends React.Component {
       location: JSON.stringify(this.state.location),
       hooksize: this.state.hooksize
     }
+    if (
+      fish.trout === null ||
+      fish.fly === null ||
+      fish.date === null ||
+      fish.weather === null ||
+      fish.location === null ||
+      fish.hooksize === null
+      ) {
+        Alert.alert('Sorry, found a null field. Cannot submit.')
+        return
+      }
     fetch('https://xvjn5cyjk4.execute-api.us-east-1.amazonaws.com/dev/addfish', {
       method: 'post',
       body: JSON.stringify(fish)
@@ -97,6 +111,7 @@ class Home extends React.Component {
     .then(res => {
       console.log(res)
       // this.updateFlies()
+      Alert.alert('Fish successfully added to the database!')
       this.setState({
         trout: null,
         fly: null,

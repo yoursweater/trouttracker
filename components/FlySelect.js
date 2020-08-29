@@ -27,6 +27,10 @@ class FlySelect extends React.Component {
         flies: newflies
       })
     })
+    .catch(err => {
+      console.log(err)
+      Alert.alert('Error: could not retrieve flies!')
+    })
   }
 
   renderCards = () => {
@@ -59,6 +63,7 @@ class FlySelect extends React.Component {
     })
     .catch(err => {
       console.log(err)
+      Alert.alert('Error: could not add fly!')
     })
   }
 
