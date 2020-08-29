@@ -10,6 +10,10 @@ import Geolocation from '@react-native-community/geolocation';
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+// @@@@@@@@@@@@@@ 
+// NOTE: THIS APP ONLY WORKS WHEN RUN ON ACTUAL PHONES DUE TO GETLOCATION API
+// @@@@@@@@@@@@@@
+
 
 class Home extends React.Component {
 
@@ -74,7 +78,12 @@ class Home extends React.Component {
   }
 
   selectHook = (hooksize) => {
-    this.setState({ hooksize: hooksize.hook }, () => this.submitFish())
+    try {
+      this.setState({ hooksize: hooksize.hook }, () => this.submitFish())
+    } catch (err) {
+      console.log(err)
+      Alert.alert('Error submitting fish.')
+    }
   }
 
   submitFish = async () => {
@@ -104,35 +113,40 @@ class Home extends React.Component {
         Alert.alert('Sorry, found a null field. Cannot submit.')
         return
       }
-    fetch('https://xvjn5cyjk4.execute-api.us-east-1.amazonaws.com/dev/addfish', {
-      method: 'post',
-      body: JSON.stringify(fish)
-    })
-    .then(res => {
-      console.log(res)
-      // this.updateFlies()
-      Alert.alert('Fish successfully added to the database!')
-      this.setState({
-        trout: null,
-        fly: null,
-        hooksize: null,
-        location: null,
-        date: null,
-        weather: null,
-      })
-    })
-    .catch(err => {
-      console.log(err)
-      Alert.alert('Had trouble posting new fish to the database!')
-      this.setState({
-        trout: null,
-        fly: null,
-        hooksize: null,
-        location: null,
-        date: null,
-        weather: null,
-      })
-    })
+      try {
+        fetch('https://xvjn5cyjk4.execute-api.us-east-1.amazonaws.com/dev/addfish', {
+          method: 'post',
+          body: JSON.stringify(fish)
+        })
+        .then(res => {
+          console.log(res)
+          // this.updateFlies()
+          Alert.alert('Fish successfully added to the database!')
+          this.setState({
+            trout: null,
+            fly: null,
+            hooksize: null,
+            location: null,
+            date: null,
+            weather: null,
+          })
+        })
+        .catch(err => {
+          console.log(err)
+          Alert.alert('Had trouble posting new fish to the database!')
+          this.setState({
+            trout: null,
+            fly: null,
+            hooksize: null,
+            location: null,
+            date: null,
+            weather: null,
+          })
+        })
+      } catch (err) {
+        console.log(err)
+        Alert.alert('Error submitting fish. Check connection.')
+      }
 
   }
 
@@ -237,7 +251,7 @@ class Home extends React.Component {
         {/* body */}
         <ScrollView style={styles.innerContainer}>
 
-          {/* 1. select a trout type */}
+          {/* 1. select a trout type or view previously caught fish */}
           <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
             {(this.state.trout === null && this.state.startWizard === true) && this.renderCards()}
             {(this.state.trout === null && this.state.startWizard === false) && this.renderCaughtFish()}
